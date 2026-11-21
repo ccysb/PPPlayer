@@ -1,22 +1,22 @@
 <h1 align="center">
   <img src="static/logo.svg" alt="ppplayer" width="300" />
   <br>
-  <a href="https://github.com/pcoof/PPPlayer/releases">PPPlayer 桌面版</a>
+  <a href="https://github.com/ccysb/PPPlayer/releases">PPPlayer 桌面版</a>
   <br>
 </h1>
 <div align="center">
 
-[![](https://img.shields.io/github/v/release/pcoof/PPPlayer?label=Release&logo=github)](https://github.com/pcoof/PPPlayer/releases)
+[![](https://img.shields.io/github/v/release/ccysb/PPPlayer?label=Release&logo=github)](https://github.com/ccysb/PPPlayer/releases)
 [![](https://img.shields.io/badge/license-MIT-blue.svg)](#许可证)
 [![](https://img.shields.io/badge/Python-3.11%2B-3776AB.svg)](https://www.python.org/)
 </div>
 <div align="center">
 
-[![](https://raw.githubusercontent.com/CodePhiliaX/resource-trusteeship/main/readmex.svg)](https://readmex.com/pcoof/PPPlayer)
-[![](https://deepwiki.com/badge.svg)](https://deepwiki.com/pcoof/PPPlayer)
+[![](https://raw.githubusercontent.com/CodePhiliaX/resource-trusteeship/main/readmex.svg)](https://readmex.com/ccysb/PPPlayer)
+[![](https://deepwiki.com/badge.svg)](https://deepwiki.com/ccysb/PPPlayer)
 [![](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff
-)](https://zread.ai/pcoof/PPPlayer)
-[![](https://img.shields.io/badge/图表-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=digitalocean)](https://gitdiagram.com/pcoof/PPPlayer)
+)](https://zread.ai/ccysb/PPPlayer)
+[![](https://img.shields.io/badge/图表-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=digitalocean)](https://gitdiagram.com/ccysb/PPPlayer)
 
 
 </div>
@@ -102,7 +102,7 @@ uv run main.py
 docker run -d --name ppplayer -p 19527:19527 \
   -v ppplayer-data:/app/data \
   --restart unless-stopped \
-  ghcr.io/pcoof/ppplayer:latest
+  ghcr.io/ccysb/ppplayer:latest
 ```
 
 浏览器访问 `http://localhost:19527/`（播放页 `http://localhost:19527/player`）。配置写入命名卷 `ppplayer-data`，容器重建不丢。
@@ -111,7 +111,7 @@ docker run -d --name ppplayer -p 19527:19527 \
 
 ```bash
 docker logs -f ppplayer          # 查看日志
-docker pull ghcr.io/pcoof/ppplayer:latest   # 拉取最新镜像
+docker pull ghcr.io/ccysb/ppplayer:latest   # 拉取最新镜像
 docker stop ppplayer && docker rm ppplayer  # 停止并删除容器
 ```
 

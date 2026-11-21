@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11-alpine
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -6,12 +6,12 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+# Alpine 用 apk；--no-cache 不产生缓存层。ca-certificates 供 HTTPS 使用，tzdata 让 TZ=Asia/Shanghai 生效。
+RUN apk add --no-cache ca-certificates tzdata
 
 COPY requirements.web.txt /app/requirements.web.txt
-RUN python -m pip install --no-cache-dir -r /app/requirements.web.txt
+# --only-binary=:all: 强制走预编译 wheel，避免 lxml 在 musl 上回退源码编译（缺编译器/头文件）。
+RUN python -m pip install --no-cache-dir --only-binary=:all: -r /app/requirements.web.txt
 
 # 只复制 Web/API 运行所需内容；不要导入 main.py（pywebview/winreg 等 Windows-only）。
 COPY src /app/src

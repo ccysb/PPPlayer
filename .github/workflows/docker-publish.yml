@@ -59,7 +59,7 @@ jobs:
           sed -i -E "s/^version[[:space:]]*=[[:space:]]*\".*\"/version = \"${FULL_VER}\"/" pyproject.toml
           grep '^version' pyproject.toml
 
-      # GHCR 镜像名必须全小写；仓库 owner 若为大写需归一化（本仓库为 pcoof）。
+      # GHCR 镜像名必须全小写；仓库 owner 若为大写需归一化（本仓库为 ccysb）。
       - name: Resolve lowercase owner
         id: owner
         env:

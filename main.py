@@ -41,7 +41,7 @@ def get_app_version():
     return os.environ.get("PPPLAYER_VERSION", "dev")
 
 # 自动更新：GitHub Releases 检测（必须与本仓库一致，否则会去查错误仓库而误报更新）
-GITHUB_REPO = "pcoof/PPPlayer"
+GITHUB_REPO = "ccysb/PPPlayer"
 GITHUB_API_LATEST = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 GITHUB_RELEASES_URL = f"https://github.com/{GITHUB_REPO}/releases"
 GITHUB_REPO_URL = f"https://github.com/{GITHUB_REPO}"

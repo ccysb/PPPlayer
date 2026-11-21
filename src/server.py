@@ -222,9 +222,9 @@ def create_app() -> Flask:
     # 避免 /api/version 在网页端显示 "unknown"、仓库链接为空。
     if not app.config.get("APP_VERSION") or app.config.get("APP_VERSION") == "unknown":
         app.config["APP_VERSION"] = _default_app_version()
-    app.config.setdefault("GITHUB_REPO", "pcoof/PPPlayer")
-    app.config.setdefault("GITHUB_REPO_URL", "https://github.com/pcoof/PPPlayer")
-    app.config.setdefault("GITHUB_RELEASES_URL", "https://github.com/pcoof/PPPlayer/releases")
+    app.config.setdefault("GITHUB_REPO", "ccysb/PPPlayer")
+    app.config.setdefault("GITHUB_REPO_URL", "https://github.com/ccysb/PPPlayer")
+    app.config.setdefault("GITHUB_RELEASES_URL", "https://github.com/ccysb/PPPlayer/releases")
 
     # ── 页面路由 ─────────────────────────────────────────────
     @app.route("/")
