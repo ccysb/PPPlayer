@@ -34,12 +34,16 @@
           </div>
         </template>
       </div>
-      <div class="ts-search-wrap" x-show="!activeSearchDisabled" x-cloak>
+      <div class="ts-search-wrap" :class="{'is-mobile-open':mobileSearchOpen}" x-show="!activeSearchDisabled" x-cloak>
         <div class="ts-search u-relative u-flex u-items-center u-pl-4 u-pr-1-5 u-py-1">
           <svg class="u-w-18 u-h-18 u-text-ink-3 u-shrink-0" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-          <input type="text" x-model="searchWd" @keydown.enter="doSearch()" @focus="showSearchHist=true" @blur="setTimeout(()=>showSearchHist=false,200)" :disabled="activeSearchDisabled" :placeholder="activeSearchDisabled ? ('当前源「'+activeSourceName+'」不支持搜索') : '搜索影片、剧集、演员…'" class="ts-search-input u-grow u-px-3 u-bg-transparent u-border-0 u-outline-none u-text-sm">
+          <input type="text" x-ref="mobileSearchInput" x-model="searchWd" @keydown.enter="doSearch()" @keydown.escape="mobileSearchOpen=false" @focus="showSearchHist=true" @blur="setTimeout(()=>showSearchHist=false,200)" :disabled="activeSearchDisabled" :placeholder="activeSearchDisabled ? ('当前源「'+activeSourceName+'」不支持搜索') : '搜索影片、剧集、演员…'" class="ts-search-input u-grow u-px-3 u-bg-transparent u-border-0 u-outline-none u-text-sm">
           <button @click="doSearch()" :disabled="activeSearchDisabled" class="ts-search-btn u-shrink-0">搜索</button>
+          <!-- 小屏展开态专用关闭按钮（大屏隐藏） -->
+          <button @click="mobileSearchOpen=false" class="ts-search-close" title="关闭搜索" aria-label="关闭搜索">
+            <svg class="u-w-5 u-h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
 
           <div x-show="showSearchHist && searchHistory.length" x-cloak class="ts-dropdown u-absolute u-z50 u-top-full u-left-0 u-right-0 u-mt-2 u-p-1-5">
             <template x-for="term in searchHistory.slice(0,6)" :key="term">
@@ -59,6 +63,10 @@
         <p x-show="activeSearchDisabled && !!activeSourceName" x-cloak class="ts-hint u-mt-2 u-text-xs">当前 API 源「<span x-text="activeSourceName"></span>」不支持搜索，已隐藏搜索框。</p>
 
       <div class="u-flex u-items-center u-gap-2 u-shrink-0">
+        <!-- 小屏搜索按钮：仅在窄屏显示，点击展开/收起覆盖整行的搜索框 -->
+        <button @click="toggleMobileSearch()" x-show="!activeSearchDisabled" x-cloak class="ts-icon-btn ts-mobile-search-btn" :class="mobileSearchOpen?'is-active':''" title="搜索" aria-label="搜索">
+          <svg class="u-w-5 u-h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </button>
         <!-- 应用内更新提示按钮：仅在更新包下载就绪(ready)时显示，位于主题按钮左侧 -->
         <button x-show="updateState==='ready'" x-cloak @click="applyAppUpdate()" class="ts-icon-btn ts-update-badge" title="有可用更新，点击重启更新">
           <svg class="u-w-5 u-h-5 u-text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M4 9a8 8 0 0 1 14-3M20 15a8 8 0 0 1-14 3"/></svg>
@@ -110,7 +118,7 @@
 <div id="appMain" class="ts-appmain">
   <div id="typeNavContainer" x-show="classes.length" x-cloak class="ts-catnav" @contextmenu.prevent="openCatCtx($event)">
     <div class="ts-container">
-      <div class="u-flex u-items-center u-gap-1 u-py-2">
+      <div class="u-flex u-items-center u-justify-between u-gap-1 u-py-2">
         <button @click="currentType='0';page=1;loadData()" class="ts-cat" :class="currentType==='0'?'is-active':''">全部</button>
         <template x-for="c in visibleClasses" :key="c.type_id">
           <button @click="currentType=String(c.type_id);page=1;loadData()" class="ts-cat" :class="currentType===String(c.type_id)?'is-active':''" x-text="c.type_name"></button>

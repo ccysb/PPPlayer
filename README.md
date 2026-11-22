@@ -75,18 +75,142 @@ PPPlayer 是一款基于 **Python + pywebview** 的开源视频聚合播放桌�
 - 仅供个人学习交流之用，24小时内请自觉卸载，勿作商业用途。
 - 在开始使用前，请务必详读并同意用户协议，确保遵守相关规定。
 
+## 获取影视 API 源（JSON 接口）
+
+PPPlayer 本身不内置片源数据，需要自行添加**影视 CMS 采集接口**作为「API 源」。项目支持苹果CMS（JSON）、飞飞CMS / 海洋CMS（XML）等常见格式，并会**按接口实际返回内容自动识别 JSON / XML**，无需手动选择。
+
+### 获取方法一：GitHub 代码搜索
+
+在 GitHub 代码搜索里查找 `provide/vod`：
+
+```
+https://github.com/search?q=provide%2Fvod&type=code
+```
+
+> GitHub 代码搜索通常需要登录。结果里形如 `https://域名/api.php/provide/vod` 的地址就是采集接口，复制出来即可。
+
+### 获取方法二：向 AI 询问
+
+在豆包、DeepSeek 等 AI 助手里直接输入：
+
+```
+cms影视采集接口大全
+```
+
+AI 会整理出一批公开采集接口地址，从中挑选可用的按下方格式填入即可。
+
+> 接口由第三方站点提供，AI 给出的地址也可能过时或失效，稳定性与内容均由对方决定；请以「检测连接」结果为准，并自行判断合规性与可用性。
+
+### 常见接口格式
+
+苹果CMS 系接口的四种常见写法（`example.com` 换成实际域名）：
+
+```
+https://example.com/api.php/provide/vod
+https://example.com/api.php/provide/vod/at/xml
+https://example.com/api.php/provide/vod/at/json
+https://example.com/inc/apijson.php
+```
+
+| 形式 | 说明 |
+|---|---|
+| `/api.php/provide/vod` | 苹果CMS 标准采集入口，最常见；返回格式由服务端决定，应用会自动探测 JSON / XML |
+| `.../provide/vod/at/xml` | 路径末尾 `at/xml` 强制返回 XML（飞飞CMS / 海洋CMS 常用） |
+| `.../provide/vod/at/json` | 路径末尾 `at/json` 强制返回 JSON，推荐优先尝试 |
+| `/inc/apijson.php` | 部分老版 / 定制苹果CMS 的独立 JSON 接口 |
+
+### 在 PPPlayer 中填入
+
+1. 打开 **设置中心 → API 源 → 新增**，把上面的完整接口地址粘贴到「源地址」。
+2. **只填接口地址本身即可**（到 `provide/vod` 或 `.php` 为止），不要手动拼 `?ac=videolist&pg=1`：分类、分页、搜索参数由应用自动追加并去重。若只填站点根地址（如 `https://example.com`），应用会尝试补成标准苹果CMS路径。
+3. 用「检测连接」确认返回是否正常（绿点可用 / 红点不可用）；检测通过后在首页顶部切到该源即可浏览。
+
+> 提示：部分源不支持搜索（返回纯文本提示），应用会自动关闭该源的搜索入口；源地址里若把 `?` 误写成 `&`，应用也会容错处理。
+
 ## 安装
 
-```bash
-cd PPPlayer
+PPPlayer 提供以下几种安装方式，按需选择：
 
-# 安装依赖
+| 方式 | 适用场景 | 是否需要 Python |
+|---|---|---|
+| 下载编译好的二进制文件 | 只想使用软件，不想配置开发环境 | 否 |
+| PowerShell 一键安装 | Windows 用户，想自动下载并创建快捷方式 | 否 |
+| 通过 AI 助手安装 | 不熟悉命令行，希望 AI 代为操作 | 否 |
+| 从源码运行 | 开发者，需要改代码或跟进最新源码 | 是（Python 3.11+ / uv） |
+
+### 方式一：下载编译好的二进制文件
+
+1. 打开 Releases 页面：<https://github.com/ccysb/PPPlayer/releases/latest>
+2. 下载 `ppplayer.exe`（Windows 单文件）或 `ppplayer-portable.zip`（便携包，解压后得到同样的 exe）。
+3. 把 exe 放到任意目录（如 `D:\Apps\`），双击运行即可，无需安装 Python 或依赖。
+
+> 单文件 exe 已内置全部运行依赖；`data/` 配置目录会在 exe 所在位置自动生成。便携包只是用 zip 分发同一个 exe，功能完全相同。
+
+### 方式二：PowerShell 一键安装
+
+打开 PowerShell（Win + X → 「终端」或「PowerShell」，**无需管理员权限**），整段复制执行：
+
+```powershell
+$dir = "$env:LOCALAPPDATA\PPPlayer"
+New-Item -ItemType Directory -Force $dir | Out-Null
+Invoke-WebRequest -Uri "https://github.com/ccysb/PPPlayer/releases/latest/download/ppplayer.exe" -OutFile "$dir\ppplayer.exe" -UseBasicParsing
+$ws = New-Object -ComObject WScript.Shell
+$sc = $ws.CreateShortcut("$env:USERPROFILE\Desktop\PPPlayer.lnk")
+$sc.TargetPath = "$dir\ppplayer.exe"
+$sc.Save()
+Start-Process "$dir\ppplayer.exe"
+```
+
+命令做了四件事：下载最新版 exe 到 `%LOCALAPPDATA%\PPPlayer\`、在桌面创建「PPPlayer」快捷方式、启动程序。`releases/latest/download` 会自动指向最新版本，无需手动改版本号；`-UseBasicParsing` 用于兼容旧版 Windows PowerShell 5.1。
+
+若只想下载、不创建快捷方式，用这一行即可：
+
+```powershell
+Invoke-WebRequest -Uri "https://github.com/ccysb/PPPlayer/releases/latest/download/ppplayer.exe" -OutFile "$env:USERPROFILE\Desktop\ppplayer.exe" -UseBasicParsing
+```
+
+> 国内直连 GitHub 可能缓慢或失败，可先配置系统代理后重试，或改用上方 Releases 页面手动下载。上面的命令直接粘贴到终端窗口逐行执行即可，无需保存为脚本文件。
+
+### 方式三：通过 AI 助手安装和启动
+
+把下面这段整段发给豆包、DeepSeek 等能执行本机命令的 AI 助手，它会自动完成下载、创建快捷方式、启动与验证：
+
+```
+请帮我在这台 Windows 电脑上安装并启动 PPPlayer：
+1. 用 PowerShell 下载最新版单文件 exe：
+   https://github.com/ccysb/PPPlayer/releases/latest/download/ppplayer.exe
+   保存到 %LOCALAPPDATA%\PPPlayer\ppplayer.exe
+2. 在桌面创建名为「PPPlayer」的快捷方式，指向该 exe。
+3. 启动它，并确认窗口标题显示为 PPPlayer。
+4. 如果下载失败，把具体报错原样告诉我，不要自行更改下载地址或来源。
+```
+
+> 适用场景：不熟悉命令行、希望 AI 代操作的用户。请确认助手具备在本机执行命令的权限；下载来源只使用上面给出的 GitHub 官方地址，避免第三方站点提供的安装包。
+
+### 方式四：从源码运行（开发者）
+
+适合需要修改代码、跟进最新提交或排查问题的用户，需 Python 3.11+ 与 uv：
+
+```bash
+git clone https://github.com/ccysb/PPPlayer.git
+cd PPPlayer
 uv sync
 ```
 
-> 说明：仓库与本地目录名仍为 `PPPlayer`（GitHub 仓库未迁移），但应用显示名已统一为 **PPPlayer**。
+然后按下方「运行」章节启动。
+
+### 验证安装
+
+无论用哪种方式，启动后请确认：
+
+1. 窗口正常打开，标题为 **PPPlayer**（首次启动约 1280×800）。
+2. 设置中心 → 基础页可正常打开，且没有提示配置读写失败。
+3. 「关于」页显示的版本号与 GitHub Releases 最新版的 tag 一致。
+4. 若双击 exe 后没有反应，在 exe 所在目录打开 PowerShell 执行 `.\ppplayer.exe` 观察报错输出。
 
 ## 运行
+
+> 仅「从源码运行」需要执行下面的命令；二进制用户直接双击 exe，Docker 用户按上方 Docker 章节启动即可。
 
 ```bash
 uv run main.py

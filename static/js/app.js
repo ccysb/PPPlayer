@@ -30,6 +30,7 @@ function app() {
         showPlayer: false,
         showMoreTypes: false,
         showSearchHist: false,
+        mobileSearchOpen: false,   // 小屏：搜索框展开态（标题栏搜索按钮控制）
         showSourceBlacklistPicker: false,
         // 导航分类右键菜单状态
         catCtxOpen: false,
@@ -567,6 +568,7 @@ function app() {
             this.saveSources();
             if (src && src.name) document.title = src.name;
             this.page = 1; this.currentType = '0'; this.searchWd = '';
+            this.mobileSearchOpen = false; this.showSearchHist = false;
             this.loadClasses().then(() => this.loadData());
         },
 
@@ -1081,6 +1083,7 @@ function app() {
         },
 
         doSearch() {
+            this.mobileSearchOpen = false; // 小屏：发起搜索后收起展开的搜索框
             if (this.activeSearchDisabled) return; // 当前激活源不支持搜索：跳过请求（界面已隐藏搜索框并给出提示）
             if (!this.searchWd.trim()) return;
             this.searchHistory = this.searchHistory.filter(t => t !== this.searchWd);
@@ -1089,6 +1092,20 @@ function app() {
             this.saveAllDataDebounced();
             this.page = 1; this.currentType = '0'; this.showSearchHist = false;
             this.loadData();
+        },
+
+        // 小屏搜索展开/收起：展开时自动聚焦输入框
+        toggleMobileSearch() {
+            if (this.activeSearchDisabled) return;
+            this.mobileSearchOpen = !this.mobileSearchOpen;
+            if (this.mobileSearchOpen) {
+                this.$nextTick(() => {
+                    const el = this.$refs.mobileSearchInput;
+                    if (el) el.focus();
+                });
+            } else {
+                this.showSearchHist = false;
+            }
         },
 
         clearSearchHistory() { this.searchHistory = []; this.saveAllDataDebounced(); },
